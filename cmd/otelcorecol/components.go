@@ -23,7 +23,6 @@ import (
 	otlpreceiver "go.opentelemetry.io/collector/receiver/otlpreceiver"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/receiver/filelogreceiver"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor"
-	"github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor"
 	"github.com/open-telemetry/opentelemetry-collector-contrib/exporter/opsrampotlpexporter"
 )
 
@@ -72,7 +71,6 @@ func components() (otelcol.Factories, error) {
 
 	factories.Processors, err = processor.MakeFactoryMap(
 		batchprocessor.NewFactory(),
-		transformprocessor.NewFactory(),
 		filterprocessor.NewFactory(),
 		memorylimiterprocessor.NewFactory(),
 	)

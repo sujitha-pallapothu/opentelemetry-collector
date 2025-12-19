@@ -9,7 +9,6 @@ toolchain go1.22.8
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/opsrampotlpexporter v0.0.0-00010101000000-000000000000
 	github.com/open-telemetry/opentelemetry-collector-contrib/processor/filterprocessor v0.113.0
-	github.com/open-telemetry/opentelemetry-collector-contrib/processor/transformprocessor v0.113.0
 	github.com/open-telemetry/opentelemetry-collector-contrib/receiver/filelogreceiver v0.113.0
 	go.opentelemetry.io/collector/component v0.113.0
 	go.opentelemetry.io/collector/confmap v1.19.0
@@ -87,7 +86,6 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/coreinternal v0.113.0 // indirect
 	github.com/open-telemetry/opentelemetry-collector-contrib/internal/filter v0.113.0 // indirect
-	github.com/open-telemetry/opentelemetry-collector-contrib/internal/pdatautil v0.113.0 // indirect
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/ottl v0.113.0 // indirect
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/pdatautil v0.113.0 // indirect
 	github.com/open-telemetry/opentelemetry-collector-contrib/pkg/stanza v0.113.0 // indirect
