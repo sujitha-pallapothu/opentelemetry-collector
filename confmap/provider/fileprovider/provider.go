@@ -40,6 +40,54 @@ func newProvider(confmap.ProviderSettings) confmap.Provider {
 	return &provider{}
 }
 
+func getCredentials(filePath string) (string, string, error) {
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		return "", "", err
+	}
+	var apiKey, apiSecret string
+	lines := strings.Split(string(data), "\n")
+	for _, line := range lines {
+		line = strings.TrimSpace(line)
+		if strings.HasPrefix(line, "API_KEY=") {
+			apiKey = strings.TrimPrefix(line, "API_KEY=")
+		}
+		if strings.HasPrefix(line, "API_SECRET=") {
+			apiSecret = strings.TrimPrefix(line, "API_SECRET=")
+		}
+	}
+	return apiKey, apiSecret, nil
+}
+
+func replaceConfig(config, clientID, clientSecret string) string {
+
+	// Use simple string replacement approach instead of regex for better control
+	lines := strings.Split(config, "\n")
+	var result []string
+
+	for _, line := range lines {
+		trimmedLine := strings.TrimSpace(line)
+
+		// Check if this line is exactly "client_id:" (with possible leading whitespace)
+		if strings.HasSuffix(trimmedLine, "client_id:") && !strings.Contains(trimmedLine, "client_secret") {
+			// Extract leading whitespace
+			leadingSpaces := line[:len(line)-len(strings.TrimLeft(line, " \t"))]
+			newLine := leadingSpaces + `client_id: "` + clientID + `"`
+			result = append(result, newLine)
+		} else if strings.HasSuffix(trimmedLine, "client_secret:") && !strings.Contains(trimmedLine, "client_id") {
+			// Extract leading whitespace
+			leadingSpaces := line[:len(line)-len(strings.TrimLeft(line, " \t"))]
+			newLine := leadingSpaces + `client_secret: "` + clientSecret + `"`
+			result = append(result, newLine)
+		} else {
+			result = append(result, line)
+		}
+	}
+
+	config = strings.Join(result, "\n")
+	return config
+}
+
 func (fmp *provider) Retrieve(_ context.Context, uri string, _ confmap.WatcherFunc) (*confmap.Retrieved, error) {
 	if !strings.HasPrefix(uri, schemeName+":") {
 		return nil, fmt.Errorf("%q uri is not supported by %q provider", uri, schemeName)
@@ -50,8 +98,13 @@ func (fmp *provider) Retrieve(_ context.Context, uri string, _ confmap.WatcherFu
 	if err != nil {
 		return nil, fmt.Errorf("unable to read the file %v: %w", uri, err)
 	}
-
-	return confmap.NewRetrievedFromYAML(content)
+	configStr := string(content)
+	apiKey, apiSecret, err := getCredentials("/etc/nsg/regInfo")
+	if err != nil {
+		return nil, fmt.Errorf("error reading credentials file: %w", err)
+	}
+	updatedConfig := replaceConfig(configStr, apiKey, apiSecret)
+	return confmap.NewRetrievedFromYAML([]byte(updatedConfig))
 }
 
 func (*provider) Scheme() string {
