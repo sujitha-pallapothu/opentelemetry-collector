@@ -2,9 +2,7 @@
 
 module go.opentelemetry.io/collector/cmd/otelcorecol
 
-go 1.22.7
-
-toolchain go1.22.8
+go 1.23.0
 
 require (
 	github.com/open-telemetry/opentelemetry-collector-contrib/exporter/opsrampotlpexporter v0.0.0-00010101000000-000000000000
@@ -33,7 +31,7 @@ require (
 	go.opentelemetry.io/collector/receiver v0.113.0
 	go.opentelemetry.io/collector/receiver/nopreceiver v0.113.0
 	go.opentelemetry.io/collector/receiver/otlpreceiver v0.113.0
-	golang.org/x/sys v0.27.0
+	golang.org/x/sys v0.31.0
 )
 
 require (
@@ -47,13 +45,13 @@ require (
 	github.com/ebitengine/purego v0.8.1 // indirect
 	github.com/elastic/go-grok v0.3.1 // indirect
 	github.com/elastic/lunes v0.1.0 // indirect
-	github.com/expr-lang/expr v1.16.9 // indirect
+	github.com/expr-lang/expr v1.17.7 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
+	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/goccy/go-json v0.10.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
@@ -169,8 +167,8 @@ require (
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842 // indirect
-	golang.org/x/net v0.31.0 // indirect
-	golang.org/x/text v0.20.0 // indirect
+	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	gonum.org/v1/gonum v0.15.1 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20241007155032-5fefd90f89a9 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20241104194629-dd2ea8efbc28 // indirect
