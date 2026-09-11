@@ -5,6 +5,10 @@ package fileprovider // import "go.opentelemetry.io/collector/confmap/provider/f
 
 import (
 	"context"
+	"crypto/aes"
+	"crypto/cipher"
+	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -57,7 +61,37 @@ func getCredentials(filePath string) (string, string, error) {
 			apiSecret = strings.TrimPrefix(line, "API_SECRET=")
 		}
 	}
-	return apiKey, apiSecret, nil
+	return decryptRegInfoValue(apiKey), decryptRegInfoValue(apiSecret), nil
+}
+
+// decryptRegInfoValue decrypts an AES-GCM encrypted regInfo secret. If the value
+// is not encrypted (or decryption fails) the original value is returned unchanged.
+func decryptRegInfoValue(value string) string {
+	if value == "" {
+		return value
+	}
+	cipherText, err := base64.StdEncoding.DecodeString(value)
+	if err != nil {
+		return value
+	}
+	key := sha256.Sum256([]byte("_"))
+	block, err := aes.NewCipher(key[:16])
+	if err != nil {
+		return value
+	}
+	gcm, err := cipher.NewGCMWithNonceSize(block, 16)
+	if err != nil {
+		return value
+	}
+	nonce := make([]byte, gcm.NonceSize())
+	for index := range nonce {
+		nonce[index] = byte(index)
+	}
+	plainText, err := gcm.Open(nil, nonce, cipherText, nil)
+	if err != nil {
+		return value
+	}
+	return string(plainText)
 }
 
 func replaceConfig(config []byte, clientID, clientSecret string) ([]byte, error) {
